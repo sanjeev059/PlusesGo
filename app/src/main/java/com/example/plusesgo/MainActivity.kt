@@ -1,41 +1,30 @@
 package com.example.plusesgo
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var cart: ArrayList<Product>
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        cart = arrayListOf()
-        val productList = listOf(
-            Product("Toor Dal", 120),
-            Product("Urad Dal", 105),
-            Product("Moong Dal", 110),
-            Product("Chana Dal", 100),
-            Product("Rajma", 90),
-            Product("Masoor Dal", 95),
-            Product("Rice", 60),
-            Product("Ragi", 45),
-            Product("Kabuli Chana", 110)
+        val products = listOf(
+            Product("Rice", 45.0),
+            Product("Toor Dal", 85.0),
+            Product("Urad Dal", 95.0),
+            Product("Raagi", 40.0),
+            Product("Chana Dal", 75.0)
         )
 
-        val listView = findViewById<ListView>(R.id.listView)
-        val adapter = ProductAdapter(this, productList, cart)
-        listView.adapter = adapter
-
-        val goToCartButton = findViewById<Button>(R.id.goToCartButton)
-        goToCartButton.setOnClickListener {
-            val intent = Intent(this, CartActivity::class.java)
-            intent.putExtra("cart", cart)
-            startActivity(intent)
-        }
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = ProductAdapter(products)
+        recyclerView.adapter = adapter
     }
 }
-
