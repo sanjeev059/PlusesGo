@@ -1,24 +1,33 @@
 package com.example.plusesgo
 
 import android.os.Bundle
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class CartActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var tvTotal: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
 
-        val cart = intent.getSerializableExtra("cart") as ArrayList<Product>
-        val listView = findViewById<ListView>(R.id.cartListView)
-        val totalView = findViewById<TextView>(R.id.totalTextView)
+        tvTotal = findViewById(R.id.tvTotal)
+        recyclerView = findViewById(R.id.recyclerViewCart)
 
-        val adapter = ProductAdapter(this, cart, arrayListOf())
-        listView.adapter = adapter
+        val cartItems = listOf(
+            Product("Rice", 45.0, 2),
+            Product("Raagi", 40.0, 3),
+            Product("Toor Dal", 85.0, 1),
+        )
 
-        val total = cart.sumOf { it.price }
-        totalView.text = "Total: ₹$total\n\nOrder Placed Successfully!"
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = ProductAdapter(cartItems)
+
+        val total = cartItems.sumOf { it.pricePerKg * it.quantity }
+        tvTotal.text = "Total: ₹%.2f".format(total)
     }
 }
-
